@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import promena from "../assets/promena.jpg";
+import { icons } from "../data/icons";
+---
+
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Projekt life_by_marek</p>
+      <h1>
+        Líp se cítit.<br />
+        Líp vypadat.<br />
+        <span class="grad-text">Líp žít.</span>
+      </h1>
+      <p class="lead">
+        Jím, co mám rád. Drastické diety neřeším. A přesto mám méně kil a víc energie než dřív.
+        Ukážu ti jednoduché kroky – a nastavíme je na míru tobě.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#prihlaska">
+          JDU DO TOHO <Fragment set:html={icons.arrow} />
+        </a>
+        <a class="btn btn-ghost" href="#jak-to-funguje">Jak to funguje</a>
+      </div>
+      <ul class="check-list">
+        <li><Fragment set:html={icons.check} /> Bez zákazů a hladovění</li>
+        <li><Fragment set:html={icons.check} /> Pohyb, který tě baví</li>
+        <li><Fragment set:html={icons.check} /> Lidsky a individuálně</li>
+      </ul>
+    </div>
+
+    <figure class="hero-media">
+      <div class="hero-media-frame">
+        <Image
+          src={promena}
+          alt="Marek Širůček dříve a dnes – srovnání před proměnou a po ní"
+          widths={[360, 540, 720, 960, 1200]}
+          sizes="(min-width: 960px) 34rem, 92vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <figcaption>Dříve a dnes – a hlavně lepší pocit.</figcaption>
+    </figure>
+  </div>
+</section>

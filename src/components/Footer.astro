@@ -1,0 +1,27 @@
+---
+import { icons } from "../data/icons";
+import Logo from "./Logo.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <Logo light />
+      <p>Zdraví, energie a pohoda – lidsky a na míru.</p>
+    </div>
+
+    <div class="footer-actions">
+      <a
+        class="btn btn-light"
+        href="https://www.instagram.com/life_by_marek/"
+        target="_blank"
+        rel="noopener"
+      >
+        <Fragment set:html={icons.instagram} /> @life_by_marek
+      </a>
+      <p class="copyright">© {year} Marek Širůček</p>
+    </div>
+  </div>
+</footer>

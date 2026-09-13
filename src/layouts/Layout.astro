@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>life_by_marek — Líp se cítit, líp vypadat, líp žít</title>
+    <meta
+      name="description"
+      content="Zdravé hubnutí a životní styl s Markem Širůčkem. Jednoduché kroky místo drastických diet. Nech mi na sebe kontakt a jdeme na to spolu."
+    />
+    <meta name="theme-color" content="#7AC143" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="cs_CZ" />
+    <meta property="og:title" content="life_by_marek — Líp se cítit, líp vypadat, líp žít" />
+    <meta
+      property="og:description"
+      content="Jednoduché kroky ke zdraví, lepší postavě a větší energii. Bez drastických diet. JDU DO TOHO!"
+    />
+    <meta property="og:image" content="/og.jpg" />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#obsah">Přeskočit na obsah</a>
+    <slot />
+
+    <script>
+      const revealElements = document.querySelectorAll<HTMLElement>(".reveal");
+
+      if (revealElements.length > 0 && "IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+        );
+
+        revealElements.forEach((element) => observer.observe(element));
+      } else {
+        revealElements.forEach((element) => element.classList.add("is-visible"));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+---
+import { tickerItems } from "../data/home";
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      {
+        tickerItems.map((item) => (
+          <span class="ticker-item">
+            {item} <span class="ticker-dot">•</span>
+          </span>
+        ))
+      }
+    </div>
+    <div class="ticker-group">
+      {
+        tickerItems.map((item) => (
+          <span class="ticker-item">
+            {item} <span class="ticker-dot">•</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>

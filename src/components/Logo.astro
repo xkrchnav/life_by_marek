@@ -1,0 +1,36 @@
+---
+interface Props {
+  light?: boolean;
+  gradient?: boolean;
+  label?: string;
+}
+
+const { light = false, gradient = false, label } = Astro.props;
+---
+
+<a class:list={["logo", { "logo-light": light }]} href="#top" aria-label={label}>
+  <span class="logo-mark" aria-hidden="true">
+    <svg viewBox="0 0 64 64">
+      {
+        gradient && (
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#7AC143" />
+              <stop offset="1" stop-color="#2E7CC4" />
+            </linearGradient>
+          </defs>
+        )
+      }
+      <rect width="64" height="64" rx="15" fill={gradient ? "url(#logo-grad)" : "#7AC143"} />
+      <path
+        d="M15 45V21l17 17 17-17v24"
+        fill="none"
+        stroke="#fff"
+        stroke-width="6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <span class="logo-text"><strong>life</strong>_by_marek</span>
+</a>

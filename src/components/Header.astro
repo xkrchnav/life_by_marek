@@ -1,0 +1,29 @@
+---
+import { icons } from "../data/icons";
+import Logo from "./Logo.astro";
+---
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <Logo gradient label="life_by_marek — úvod" />
+
+    <nav class="nav" aria-label="Hlavní navigace">
+      <a href="#vyhody">Co získáš</a>
+      <a href="#jak-to-funguje">Jak to funguje</a>
+      <a href="#pribeh">Příběh</a>
+    </nav>
+
+    <div class="header-actions">
+      <a
+        class="icon-link"
+        href="https://www.instagram.com/life_by_marek/"
+        target="_blank"
+        rel="noopener"
+        aria-label="Instagram life_by_marek"
+      >
+        <Fragment set:html={icons.instagram} />
+      </a>
+      <a class="btn btn-sm" href="#prihlaska">JDU DO TOHO</a>
+    </div>
+  </div>
+</header>

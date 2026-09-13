@@ -1,0 +1,27 @@
+---
+import { benefits } from "../data/home";
+import { icons } from "../data/icons";
+---
+
+<section class="section section-green" id="vyhody">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Co získáš</p>
+      <h2>Nejde jen o kila. Jde o život.</h2>
+      <p class="lead">
+        Změna se pozná hlavně v tom, jak se cítíš. Tohle se mi změnilo a můžeš to mít taky.
+      </p>
+    </div>
+    <div class="cards">
+      {
+        benefits.map((benefit, index) => (
+          <article class="card reveal" style={`transition-delay: ${index * 80}ms`}>
+            <span class="card-icon" set:html={icons[benefit.icon]}></span>
+            <h3>{benefit.title}</h3>
+            <p>{benefit.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+---
+import { Image } from "astro:assets";
+import marekAkce from "../assets/marek-akce.jpg";
+import { icons } from "../data/icons";
+---
+
+<section class="section section-blue" id="pribeh">
+  <div class="wrap about-grid">
+    <figure class="about-media reveal">
+      <Image
+        src={marekAkce}
+        alt="Marek Širůček na akci se stánkem zdraví a kondice"
+        widths={[320, 480, 640, 880]}
+        sizes="(min-width: 920px) 30rem, 92vw"
+      />
+      <figcaption>Osobně, lidsky a s úsměvem.</figcaption>
+    </figure>
+
+    <div class="about-copy reveal">
+      <p class="eyebrow">Příběh</p>
+      <h2>Těsně před třicítkou vypadám líp než ve třiadvaceti</h2>
+      <p>
+        Nejde ale jen o kila. Líp se cítím, líp stíhám děti, líp se mi hraje fotbal, líp spím a
+        regeneruju. Změna přišla postupně – díky jednoduchým krokům, které zvládne každý.
+      </p>
+      <p>
+        Jím pořád to, co mám rád. A i s méně pohybem než dřív to funguje. Pohyb je totiž
+        doplněk, ne hlavní cíl.
+      </p>
+      <blockquote>„Když to jde mně, půjde to i tobě.“</blockquote>
+      <p class="signature">Marek Širůček · life_by_marek</p>
+      <a
+        class="btn btn-ghost btn-insta"
+        href="https://www.instagram.com/life_by_marek/"
+        target="_blank"
+        rel="noopener"
+      >
+        <Fragment set:html={icons.instagram} /> Sleduj na Instagramu
+      </a>
+    </div>
+  </div>
+</section>

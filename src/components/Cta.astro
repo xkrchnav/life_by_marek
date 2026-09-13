@@ -1,0 +1,120 @@
+---
+import { icons } from "../data/icons";
+---
+
+<section class="section cta" id="prihlaska">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Přihláška</p>
+      <h2>Jdeme na to spolu?</h2>
+      <p class="lead">
+        Nech mi na sebe kontakt a ozvu se ti. V klidu probereme, co chceš změnit, a ukážeme si,
+        co spolu dokážeme.
+      </p>
+    </div>
+
+    <div class="form-card reveal">
+      <form id="lead-form" novalidate>
+        <div class="field">
+          <label for="name">Jméno</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            placeholder="Tvoje jméno"
+            required
+          />
+          <p class="field-error-message">Vyplň prosím svoje jméno.</p>
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            placeholder="tvuj@email.cz"
+            required
+          />
+          <p class="field-error-message">Zadej prosím platný e-mail.</p>
+        </div>
+        <div class="field">
+          <label for="phone">Telefon</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            inputmode="tel"
+            placeholder="+420 123 456 789"
+            required
+          />
+          <p class="field-error-message">Zadej prosím platné telefonní číslo.</p>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">
+          JDU DO TOHO <Fragment set:html={icons.arrow} />
+        </button>
+        <p class="form-note">Žádný spam. Ozvu se ti osobně a nezávazně.</p>
+      </form>
+
+      <div class="form-success" id="form-success" hidden tabindex="-1">
+        <span class="success-icon"><Fragment set:html={icons.check} /></span>
+        <h3>Díky, mám to!</h3>
+        <p>Ozvu se ti co nejdřív a domluvíme se na dalších krocích.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("#lead-form");
+  const success = document.querySelector<HTMLElement>("#form-success");
+
+  const isValid: Record<string, (value: string) => boolean> = {
+    name: (value) => value.trim().length >= 2,
+    email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()),
+    phone: (value) => value.replace(/\D/g, "").length >= 9,
+  };
+
+  const validateField = (input: HTMLInputElement) => {
+    const check = isValid[input.name];
+    const valid = check ? check(input.value) : true;
+    input.closest(".field")?.classList.toggle("field-error", !valid);
+    input.setAttribute("aria-invalid", String(!valid));
+    return valid;
+  };
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const inputs = Array.from(form.querySelectorAll("input"));
+    let firstInvalid: HTMLInputElement | null = null;
+
+    for (const input of inputs) {
+      if (!validateField(input) && !firstInvalid) {
+        firstInvalid = input;
+      }
+    }
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return;
+    }
+
+    form.hidden = true;
+    if (success) {
+      success.hidden = false;
+      success.focus();
+    }
+  });
+
+  form?.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("blur", () => validateField(input));
+    input.addEventListener("input", () => {
+      if (input.closest(".field")?.classList.contains("field-error")) {
+        validateField(input);
+      }
+    });
+  });
+</script>

@@ -1,0 +1,24 @@
+---
+import { steps } from "../data/home";
+---
+
+<section class="section" id="jak-to-funguje">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Jak to funguje</p>
+      <h2>Tři jednoduché kroky</h2>
+      <p class="lead">Žádná věda. Jen cesta, která vydrží i v běžném týdnu.</p>
+    </div>
+    <div class="steps">
+      {
+        steps.map((step, index) => (
+          <article class="step reveal" style={`transition-delay: ${index * 100}ms`}>
+            <span class="step-number">{step.number}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
