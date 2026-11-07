@@ -1,6 +1,11 @@
 ---
 import { icons } from "../data/icons";
+import { navigation } from "../lib/site";
+import { withBase } from "../lib/url";
 import Logo from "./Logo.astro";
+
+const pathname = Astro.url.pathname;
+const isArticles = pathname.startsWith(withBase("/clanky"));
 ---
 
 <header class="site-header">
@@ -8,9 +13,16 @@ import Logo from "./Logo.astro";
     <Logo gradient label="life_by_marek — úvod" />
 
     <nav class="nav" aria-label="Hlavní navigace">
-      <a href="#vyhody">Co získáš</a>
-      <a href="#jak-to-funguje">Jak to funguje</a>
-      <a href="#pribeh">Příběh</a>
+      {
+        navigation.map((item) => (
+          <a
+            href={withBase(item.href)}
+            aria-current={item.href === "/clanky/" && isArticles ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="header-actions">
@@ -23,7 +35,70 @@ import Logo from "./Logo.astro";
       >
         <Fragment set:html={icons.instagram} />
       </a>
-      <a class="btn btn-sm" href="#prihlaska">JDU DO TOHO</a>
+      <a class="btn btn-sm header-cta" href={withBase("/#prihlaska")}>JDU DO TOHO</a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Otevřít menu"
+      >
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
     </div>
   </div>
+
+  <div class="mobile-nav" id="mobile-nav" hidden>
+    <nav class="mobile-nav-links" aria-label="Mobilní navigace">
+      {
+        navigation.map((item) => (
+          <a
+            href={withBase(item.href)}
+            aria-current={item.href === "/clanky/" && isArticles ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <a class="btn btn-primary btn-block" href={withBase("/#prihlaska")}>JDU DO TOHO</a>
+    <a
+      class="mobile-nav-insta"
+      href="https://www.instagram.com/life_by_marek/"
+      target="_blank"
+      rel="noopener"
+    >
+      <Fragment set:html={icons.instagram} /> @life_by_marek
+    </a>
+  </div>
 </header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const panel = document.querySelector<HTMLElement>("#mobile-nav");
+
+  const close = () => {
+    if (!toggle || !panel) return;
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Otevřít menu");
+    panel.hidden = true;
+  };
+
+  toggle?.addEventListener("click", () => {
+    if (!panel) return;
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    toggle.setAttribute("aria-label", open ? "Otevřít menu" : "Zavřít menu");
+    panel.hidden = open;
+  });
+
+  panel?.querySelectorAll("a").forEach((link) => link.addEventListener("click", close));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") close();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 900) close();
+  });
+</script>

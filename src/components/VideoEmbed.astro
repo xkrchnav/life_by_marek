@@ -1,0 +1,51 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description?: string;
+}
+
+const { id, title, description } = Astro.props;
+const thumbnail = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+---
+
+<div class="video-embed" data-youtube-id={id} data-youtube-title={title}>
+  <button class="video-embed-button" type="button" aria-label={`Přehrát video: ${title}`}>
+    <img
+      class="video-embed-thumb"
+      src={thumbnail}
+      alt=""
+      width="1280"
+      height="720"
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="video-embed-play" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+    </span>
+    <span class="video-embed-label">{description ?? title}</span>
+  </button>
+  <noscript>
+    <p class="video-embed-noscript">
+      <a href={`https://www.youtube.com/watch?v=${id}`}>Přehrát video na YouTube</a>
+    </p>
+  </noscript>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-youtube-id]").forEach((box) => {
+    const button = box.querySelector("button");
+    button?.addEventListener("click", () => {
+      const id = box.dataset.youtubeId;
+      if (!id) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.title = box.dataset.youtubeTitle ?? "Video";
+      iframe.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      iframe.loading = "lazy";
+      box.replaceChildren(iframe);
+    });
+  });
+</script>

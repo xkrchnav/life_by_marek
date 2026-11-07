@@ -1,5 +1,6 @@
 ---
 import { icons } from "../data/icons";
+import { withBase } from "../lib/url";
 import Logo from "./Logo.astro";
 
 const year = new Date().getFullYear();
@@ -13,6 +14,11 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="footer-actions">
+      <nav class="footer-nav" aria-label="Patička">
+        <a href={withBase("/clanky/")}>Články</a>
+        <a href={withBase("/#caste-otazky")}>Časté otázky</a>
+        <a href={withBase("/#prihlaska")}>Přihláška</a>
+      </nav>
       <a
         class="btn btn-light"
         href="https://www.instagram.com/life_by_marek/"

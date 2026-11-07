@@ -1,40 +1,78 @@
 ---
 import "../styles/global.css";
+import Seo from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../lib/site";
+import { withBase } from "../lib/url";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  ogType?: "website" | "article";
+  published?: Date;
+  modified?: Date;
+  author?: string;
+  section?: string;
+  schema?: Record<string, unknown>[];
+  chrome?: boolean;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  image,
+  imageAlt,
+  noindex = false,
+  ogType = "website",
+  published,
+  modified,
+  author,
+  section,
+  schema,
+  chrome = true,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="cs">
+<html lang={site.lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>life_by_marek — Líp se cítit, líp vypadat, líp žít</title>
-    <meta
-      name="description"
-      content="Zdravé hubnutí a životní styl s Markem Širůčkem. Jednoduché kroky místo drastických diet. Nech mi na sebe kontakt a jdeme na to spolu."
+    <Seo
+      title={title}
+      description={description}
+      image={image}
+      imageAlt={imageAlt}
+      noindex={noindex}
+      ogType={ogType}
+      published={published}
+      modified={modified}
+      author={author}
+      section={section}
+      schema={schema}
     />
-    <meta name="theme-color" content="#7AC143" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link rel="apple-touch-icon" href={withBase("/favicon.svg")} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://i.ytimg.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="cs_CZ" />
-    <meta property="og:title" content="life_by_marek — Líp se cítit, líp vypadat, líp žít" />
-    <meta
-      property="og:description"
-      content="Jednoduché kroky ke zdraví, lepší postavě a větší energii. Bez drastických diet. JDU DO TOHO!"
-    />
-    <meta property="og:image" content="/og.jpg" />
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
   </head>
-  <body>
+  <body class:list={{ "has-chrome": chrome }}>
     <a class="skip-link" href="#obsah">Přeskočit na obsah</a>
+    {chrome && <Header />}
     <slot />
+    {chrome && <Footer />}
 
     <script>
       const revealElements = document.querySelectorAll<HTMLElement>(".reveal");

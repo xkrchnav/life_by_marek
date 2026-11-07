@@ -1,5 +1,7 @@
 ---
 import { icons } from "../data/icons";
+
+const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT ?? "";
 ---
 
 <section class="section cta" id="prihlaska">
@@ -14,7 +16,7 @@ import { icons } from "../data/icons";
     </div>
 
     <div class="form-card reveal">
-      <form id="lead-form" novalidate>
+      <form id="lead-form" novalidate data-endpoint={endpoint}>
         <div class="field">
           <label for="name">Jméno</label>
           <input
@@ -53,9 +55,16 @@ import { icons } from "../data/icons";
           />
           <p class="field-error-message">Zadej prosím platné telefonní číslo.</p>
         </div>
+        <div class="field field-honeypot" aria-hidden="true">
+          <label for="company">Toto pole nevyplňuj</label>
+          <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
         <button class="btn btn-primary btn-block" type="submit">
           JDU DO TOHO <Fragment set:html={icons.arrow} />
         </button>
+        <p class="form-error" id="form-error" role="alert" hidden>
+          Odeslání se nepovedlo. Zkus to prosím znovu, nebo mi napiš na Instagram.
+        </p>
         <p class="form-note">Žádný spam. Ozvu se ti osobně a nezávazně.</p>
       </form>
 
@@ -71,6 +80,8 @@ import { icons } from "../data/icons";
 <script>
   const form = document.querySelector<HTMLFormElement>("#lead-form");
   const success = document.querySelector<HTMLElement>("#form-success");
+  const errorBox = document.querySelector<HTMLElement>("#form-error");
+  const submitButton = form?.querySelector<HTMLButtonElement>("button[type='submit']");
 
   const isValid: Record<string, (value: string) => boolean> = {
     name: (value) => value.trim().length >= 2,
@@ -86,9 +97,11 @@ import { icons } from "../data/icons";
     return valid;
   };
 
-  form?.addEventListener("submit", (event) => {
+  form?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const inputs = Array.from(form.querySelectorAll("input"));
+    const inputs = Array.from(form.querySelectorAll<HTMLInputElement>("input")).filter(
+      (input) => input.name !== "company"
+    );
     let firstInvalid: HTMLInputElement | null = null;
 
     for (const input of inputs) {
@@ -102,6 +115,25 @@ import { icons } from "../data/icons";
       return;
     }
 
+    if (errorBox) errorBox.hidden = true;
+
+    const endpoint = form.dataset.endpoint ?? "";
+    if (endpoint) {
+      submitButton?.setAttribute("disabled", "true");
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      } catch {
+        submitButton?.removeAttribute("disabled");
+        if (errorBox) errorBox.hidden = false;
+        return;
+      }
+    }
+
     form.hidden = true;
     if (success) {
       success.hidden = false;
@@ -109,7 +141,8 @@ import { icons } from "../data/icons";
     }
   });
 
-  form?.querySelectorAll("input").forEach((input) => {
+  form?.querySelectorAll<HTMLInputElement>("input").forEach((input) => {
+    if (input.name === "company") return;
     input.addEventListener("blur", () => validateField(input));
     input.addEventListener("input", () => {
       if (input.closest(".field")?.classList.contains("field-error")) {
