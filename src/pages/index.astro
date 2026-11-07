@@ -1,24 +1,32 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Ticker from "../components/Ticker.astro";
 import Benefits from "../components/Benefits.astro";
 import Steps from "../components/Steps.astro";
 import Story from "../components/Story.astro";
+import BlogTeaser from "../components/BlogTeaser.astro";
+import Faq from "../components/Faq.astro";
 import Cta from "../components/Cta.astro";
-import Footer from "../components/Footer.astro";
+import { faq } from "../data/home";
+import { faqNode } from "../lib/schema";
+import { site } from "../lib/site";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
 ---
 
-<Layout>
-  <Header />
+<Layout title={site.title} description={site.description} schema={[faqNode(faq)]}>
   <main id="obsah">
     <Hero />
     <Ticker />
     <Benefits />
     <Steps />
     <Story />
+    <BlogTeaser posts={posts} />
+    <Faq />
     <Cta />
   </main>
-  <Footer />
 </Layout>

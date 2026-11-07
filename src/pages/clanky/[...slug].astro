@@ -1,0 +1,173 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { getImage, Image } from "astro:assets";
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import { blogPostingNode, breadcrumbNode } from "../../lib/schema";
+import { formatDate, readingTime } from "../../lib/format";
+import { site } from "../../lib/site";
+import { absoluteUrl, withBase } from "../../lib/url";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = { post: CollectionEntry<"blog"> };
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const siteUrl = Astro.site ?? new URL("https://xkrchnav.github.io");
+const path = `/clanky/${post.id}/`;
+const minutes = readingTime(post.body ?? "");
+const updated = post.data.updatedAt;
+
+const ogImage = post.data.image
+  ? absoluteUrl(
+      (
+        await getImage({
+          src: post.data.image,
+          width: 1200,
+          height: 630,
+          fit: "cover",
+          format: "jpeg",
+        })
+      ).src,
+      siteUrl
+    )
+  : absoluteUrl(site.ogImage, siteUrl);
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+
+const related = posts
+  .filter((entry) => entry.id !== post.id)
+  .sort((a, b) => {
+    const sharedA = a.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+    const sharedB = b.data.tags.filter((tag) => post.data.tags.includes(tag)).length;
+    return sharedB - sharedA;
+  })
+  .slice(0, 2);
+
+const title = `${post.data.title} | life_by_marek`;
+---
+
+<Layout
+  title={title}
+  description={post.data.description}
+  image={ogImage}
+  imageAlt={post.data.imageAlt ?? post.data.title}
+  ogType="article"
+  published={post.data.publishedAt}
+  modified={updated}
+  author={post.data.author}
+  section={post.data.tags[0]}
+  schema={[
+    blogPostingNode({
+      siteUrl,
+      title: post.data.title,
+      description: post.data.description,
+      path,
+      published: post.data.publishedAt,
+      modified: updated,
+      image: ogImage,
+      lang: post.data.lang,
+      section: post.data.tags[0],
+      wordCount: (post.body ?? "").trim().split(/\s+/).filter(Boolean).length,
+    }),
+    breadcrumbNode(siteUrl, [
+      { name: "Domů", path: "/" },
+      { name: "Články", path: "/clanky/" },
+      { name: post.data.title, path },
+    ]),
+  ]}
+>
+  <main id="obsah" class="section">
+    <div class="wrap article-wrap">
+      <nav class="breadcrumbs" aria-label="Drobečková navigace">
+        <a href={withBase("/")}>Domů</a>
+        <span aria-hidden="true">/</span>
+        <a href={withBase("/clanky/")}>Články</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{post.data.title}</span>
+      </nav>
+
+      <header class="article-head">
+        {post.data.tags[0] && <p class="eyebrow">{post.data.tags[0]}</p>}
+        <h1>{post.data.title}</h1>
+        <p class="lead">{post.data.description}</p>
+        <p class="article-meta">
+          <time datetime={post.data.publishedAt.toISOString()}>
+            {formatDate(post.data.publishedAt)}
+          </time>
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min čtení</span>
+          <span aria-hidden="true">·</span>
+          <span>{post.data.author}</span>
+          {updated && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>upraveno {formatDate(updated)}</span>
+            </>
+          )}
+        </p>
+      </header>
+
+      {
+        post.data.image && (
+          <figure class="article-cover">
+            <Image
+              src={post.data.image}
+              alt={post.data.imageAlt ?? ""}
+              widths={[640, 960, 1200, 1600]}
+              sizes="(min-width: 900px) 46rem, 92vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </figure>
+        )
+      }
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <aside class="article-cta">
+        <p class="eyebrow">Chceš to zkusit?</p>
+        <h2>Nejdřív si promluvíme. Pak se rozhodneš.</h2>
+        <p>Nech mi na sebe kontakt a ozvu se ti. Nezávazně, lidsky a bez tlaku.</p>
+        <a class="btn btn-primary" href={withBase("/#prihlaska")}>JDU DO TOHO</a>
+      </aside>
+
+      <p class="article-back">
+        <a href={withBase("/clanky/")}>← Zpět na všechny články</a>
+      </p>
+    </div>
+
+    {
+      related.length > 0 && (
+        <div class="wrap related-wrap">
+          <h2 class="related-title">Další čtení</h2>
+          <div class="blog-grid">
+            {related.map((entry) => (
+              <BlogCard
+                href={withBase(`/clanky/${entry.id}/`)}
+                title={entry.data.title}
+                description={entry.data.description}
+                date={entry.data.publishedAt}
+                tag={entry.data.tags[0]}
+                image={entry.data.image}
+                imageAlt={entry.data.imageAlt}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </main>
+</Layout>

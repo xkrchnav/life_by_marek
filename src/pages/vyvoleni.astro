@@ -1,0 +1,276 @@
+---
+import Layout from "../layouts/Layout.astro";
+import VideoEmbed from "../components/VideoEmbed.astro";
+import { vyvoleni } from "../data/vyvoleni";
+import { hashCode } from "../lib/gate";
+import { videoNode } from "../lib/schema";
+import { withBase } from "../lib/url";
+import "../styles/vyvoleni.css";
+
+const codeHash = hashCode(vyvoleni.passphrase);
+const thumbnail = `https://i.ytimg.com/vi/${vyvoleni.video.youtubeId}/maxresdefault.jpg`;
+
+const schema = [
+  videoNode({
+    name: vyvoleni.video.title,
+    description: vyvoleni.video.description,
+    thumbnailUrl: thumbnail,
+    uploadDate: vyvoleni.video.uploadDate,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${vyvoleni.video.youtubeId}`,
+  }),
+];
+---
+
+<Layout
+  title="Pro vyvolené | life_by_marek"
+  description="Soukromá stránka pro pozvané. Video, které není pro každého."
+  noindex
+  chrome={false}
+  schema={schema}
+>
+  <div class="v-page">
+    <div class="v-bg" aria-hidden="true"></div>
+
+    <header class="v-top">
+      <a class="v-brand" href={withBase("/")} aria-label="life_by_marek — úvod">
+        <span class="v-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <rect width="64" height="64" rx="15" fill="#7AC143"></rect>
+            <path
+              d="M15 45V21l17 17 17-17v24"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+        <span class="v-brand-text"><strong>life</strong>_by_marek</span>
+      </a>
+      <span class="v-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+          <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+        </svg>
+        Pro vyvolené
+      </span>
+    </header>
+
+    <main id="obsah" class="v-main">
+      <section class="v-lock" data-lock data-hash={codeHash}>
+        <div class="v-lock-card">
+          <span class="v-lock-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+              <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+            </svg>
+          </span>
+          <p class="v-kicker">Soukromý vstup</p>
+          <h1>Tahle stránka není pro každého.</h1>
+          <p class="v-lead">
+            Je tu pro lidi, kterým to řeknu dřív než ostatním. Pokud máš kód, jsi jeden z nich.
+          </p>
+          <form class="v-form" data-gate novalidate>
+            <label for="code">Přístupový kód</label>
+            <div class="v-input-row">
+              <input
+                id="code"
+                name="code"
+                type="password"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="••••••••"
+                required
+              />
+              <button class="v-btn v-btn-solid" type="submit">Odemknout</button>
+            </div>
+            <p class="v-error" data-gate-error role="alert" hidden>
+              Ten kód nesedí. Zkus to znovu.
+            </p>
+          </form>
+          <p class="v-note">Kód ti posílám osobně. Bez něj to nemá smysl.</p>
+        </div>
+      </section>
+
+      <div class="v-content" data-content hidden>
+        <section class="v-hero">
+          <p class="v-kicker">Pozvánka pro vyvolené</p>
+          <h1>
+            Nejde o dietu.<br />
+            <span class="v-grad">Jde o to, jak žiješ.</span>
+          </h1>
+          <p class="v-lead v-lead-wide">
+            Sedni si, pusť si video celé a poslechni, co ti chci říct. Pak se rozhodni. Nic tě
+            nehoní.
+          </p>
+          <div class="v-video">
+            <VideoEmbed
+              id={vyvoleni.video.youtubeId}
+              title={vyvoleni.video.title}
+              description={vyvoleni.video.title}
+            />
+          </div>
+          <p class="v-video-note">Tohle video není veřejné. Nech si ho pro sebe.</p>
+        </section>
+
+        <ul class="v-strip" aria-label="Co to je">
+          <li>Bez zákazů</li>
+          <li>Bez hladovění</li>
+          <li>Bez jojo efektu</li>
+          <li>Lidsky a na míru</li>
+        </ul>
+
+        <section class="v-section">
+          <header class="v-section-head">
+            <p class="v-kicker">Co si odneseš</p>
+            <h2>Ne jen kila. Celý den.</h2>
+          </header>
+          <div class="v-cards">
+            {
+              vyvoleni.benefits.map((benefit, index) => (
+                <article class="v-card">
+                  <span class="v-card-number">{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{benefit.title}</h3>
+                  <p>{benefit.text}</p>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        <section class="v-section">
+          <div class="v-split">
+            <div class="v-panel v-panel-yes">
+              <h2>Pro koho to je</h2>
+              <ul class="v-list v-list-check">
+                {vyvoleni.forWhom.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+            <div class="v-panel v-panel-no">
+              <h2>Pro koho ne</h2>
+              <ul class="v-list v-list-cross">
+                {vyvoleni.notForWhom.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="v-section">
+          <header class="v-section-head">
+            <p class="v-kicker">Jak to proběhne</p>
+            <h2>Tři kroky. Žádný tlak.</h2>
+          </header>
+          <ol class="v-steps">
+            {
+              vyvoleni.steps.map((step) => (
+                <li>
+                  <span class="v-step-number">{step.number}</span>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </section>
+
+        <blockquote class="v-quote">
+          <p>„Když to jde mně, půjde to i tobě.“</p>
+          <cite>Marek Širůček</cite>
+        </blockquote>
+
+        <section class="v-offer">
+          <p class="v-kicker">{vyvoleni.offer.kicker}</p>
+          <h2>{vyvoleni.offer.title}</h2>
+          <p class="v-lead">{vyvoleni.offer.text}</p>
+          <a
+            class="v-btn v-btn-solid v-btn-lg"
+            href={vyvoleni.ctaUrl}
+            target="_blank"
+            rel="noopener"
+          >
+            {vyvoleni.ctaLabel} <span aria-hidden="true">→</span>
+          </a>
+          <p class="v-offer-note">{vyvoleni.offer.note}</p>
+        </section>
+
+        <section class="v-section">
+          <header class="v-section-head">
+            <p class="v-kicker">Časté otázky</p>
+            <h2>Co se lidi ptají</h2>
+          </header>
+          <div class="v-faq">
+            {
+              vyvoleni.faq.map((item) => (
+                <details>
+                  <summary>
+                    <span>{item.q}</span>
+                    <span class="v-faq-icon" aria-hidden="true" />
+                  </summary>
+                  <p>{item.a}</p>
+                </details>
+              ))
+            }
+          </div>
+        </section>
+
+        <footer class="v-footer">
+          <p>Tahle stránka není veřejná. Prosím, nešiř ji dál.</p>
+          <a href={withBase("/")}>Zpět na veřejný web <span aria-hidden="true">→</span></a>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    import { hashCode } from "../lib/gate";
+
+    const STORAGE_KEY = "lbm-vyvoleni";
+    const lock = document.querySelector<HTMLElement>("[data-lock]");
+    const content = document.querySelector<HTMLElement>("[data-content]");
+    const form = document.querySelector<HTMLFormElement>("[data-gate]");
+    const input = document.querySelector<HTMLInputElement>("#code");
+    const error = document.querySelector<HTMLElement>("[data-gate-error]");
+
+    const remember = () => {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "1");
+      } catch {
+        /* private mode */
+      }
+    };
+
+    const unlock = () => {
+      if (!lock || !content) return;
+      lock.hidden = true;
+      content.hidden = false;
+      content.classList.add("is-visible");
+      const heading = content.querySelector<HTMLElement>("h1");
+      heading?.setAttribute("tabindex", "-1");
+      heading?.focus({ preventScroll: true });
+    };
+
+    try {
+      if (sessionStorage.getItem(STORAGE_KEY) === "1") unlock();
+    } catch {
+      /* private mode */
+    }
+
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!input || !lock) return;
+      if (hashCode(input.value) === lock.dataset.hash) {
+        remember();
+        unlock();
+        return;
+      }
+      if (error) error.hidden = false;
+      input.setAttribute("aria-invalid", "true");
+      input.select();
+    });
+
+    input?.addEventListener("input", () => {
+      if (error) error.hidden = true;
+      input.removeAttribute("aria-invalid");
+    });
+  </script>
+</Layout>

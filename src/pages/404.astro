@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { withBase } from "../lib/url";
+---
+
+<Layout
+  title="Stránka nenalezena | life_by_marek"
+  description="Tahle stránka tu není. Zkus to z domovské stránky nebo z článků."
+  noindex
+>
+  <main id="obsah" class="section not-found">
+    <div class="wrap not-found-inner">
+      <p class="eyebrow">404</p>
+      <h1>Tudy cesta nevede.</h1>
+      <p class="lead">
+        Stránka buď neexistuje, nebo se přestěhovala. Zkus to z domova nebo z článků.
+      </p>
+      <div class="not-found-actions">
+        <a class="btn btn-primary" href={withBase("/")}>Zpět na úvod</a>
+        <a class="btn btn-ghost" href={withBase("/clanky/")}>Články</a>
+      </div>
+    </div>
+  </main>
+</Layout>

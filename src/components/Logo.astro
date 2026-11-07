@@ -1,14 +1,18 @@
 ---
+import { withBase } from "../lib/url";
+
 interface Props {
   light?: boolean;
   gradient?: boolean;
   label?: string;
+  href?: string;
 }
 
-const { light = false, gradient = false, label } = Astro.props;
+const { light = false, gradient = false, label = "life_by_marek", href = withBase("/#top") } =
+  Astro.props;
 ---
 
-<a class:list={["logo", { "logo-light": light }]} href="#top" aria-label={label}>
+<a class:list={["logo", { "logo-light": light }]} href={href} aria-label={label}>
   <span class="logo-mark" aria-hidden="true">
     <svg viewBox="0 0 64 64">
       {

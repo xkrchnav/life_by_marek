@@ -1,0 +1,26 @@
+---
+import { faq } from "../data/home";
+---
+
+<section class="section" id="caste-otazky">
+  <div class="wrap faq-wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Časté otázky</p>
+      <h2>Co se lidi ptají nejčastěji</h2>
+      <p class="lead">Bez omáčky. Kdyby ti něco chybělo, napiš mi na Instagramu.</p>
+    </div>
+    <div class="faq-list">
+      {
+        faq.map((item) => (
+          <details class="faq-item reveal">
+            <summary>
+              <span>{item.q}</span>
+              <span class="faq-icon" aria-hidden="true" />
+            </summary>
+            <p>{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

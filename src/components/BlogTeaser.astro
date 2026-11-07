@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { withBase } from "../lib/url";
+import BlogCard from "./BlogCard.astro";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length > 0 && (
+    <section class="section section-green" id="clanky">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">Články</p>
+          <h2>Co mi funguje. Bez omáčky.</h2>
+          <p class="lead">
+            Píšu o jídle, pohybu a o tom, co se mi osvědčilo v běžném týdnu. Nic, co bys
+            nezvládl.
+          </p>
+        </div>
+        <div class="blog-grid">
+          {posts.map((post, index) => (
+            <div class="reveal" style={`transition-delay: ${index * 80}ms`}>
+              <BlogCard
+                href={withBase(`/clanky/${post.id}/`)}
+                title={post.data.title}
+                description={post.data.description}
+                date={post.data.publishedAt}
+                tag={post.data.tags[0]}
+                image={post.data.image}
+                imageAlt={post.data.imageAlt}
+              />
+            </div>
+          ))}
+        </div>
+        <p class="section-more">
+          <a class="btn btn-ghost" href={withBase("/clanky/")}>Všechny články</a>
+        </p>
+      </div>
+    </section>
+  )
+}
