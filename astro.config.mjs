@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import { unified } from "@astrojs/markdown-remark";
 import { rehypeBaseLinks } from "./src/lib/rehype-base.mjs";
 
-const site = process.env.SITE_URL ?? "https://xkrchnav.github.io";
+const site = process.env.SITE_URL ?? "https://lifebymarek.cz";
 const base = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({

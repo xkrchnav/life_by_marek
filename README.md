@@ -117,22 +117,50 @@ Po nasazení nezapomeň:
 
 ---
 
-## Nasazení
+## Nasazení a doména
+
+Produkce: **https://lifebymarek.cz** (bez `www`, `www` se přesměruje).
 
 Automaticky přes GitHub Actions na GitHub Pages při pushi do `main`.
 
-Workflow (`.github/workflows/astro.yml`) předává adresu a základní cestu přes proměnné:
+Workflow (`.github/workflows/astro.yml`) bere adresu a základní cestu z repozitářových proměnných, případně z `actions/configure-pages`:
 
-- `SITE_URL` – doména (teď `https://xkrchnav.github.io`)
-- `BASE_PATH` – `/life_by_marek` pro GitHub Pages
+- `SITE_URL` = `https://lifebymarek.cz`
+- `BASE_PATH` = `/`
 
-Lokálně se buildí s `BASE_PATH=/`, takže `http://localhost:4321/` funguje bez podadresáře.
+Lokálně se buildí s `BASE_PATH=/`, takže `http://localhost:4321/` funguje bez podadresáře. `SITE_URL` má v `astro.config.mjs` výchozí hodnotu `https://lifebymarek.cz`.
 
-**Až koupíš doménu:**
+### DNS u registrátora
 
-1. V GitHubu → Settings → Pages → Custom domain nastav doménu.
-2. GitHub Actions pak předá `BASE_PATH=/` samo.
-3. Hotovo – canonical, sitemap i OG odkazy se přepíšou.
+Doména je na GitHub Pages, takže se v DNS nastavuje:
+
+| Typ | Název | Hodnota |
+| --- | --- | --- |
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| AAAA | `@` | `2606:50c0:8000::153` |
+| AAAA | `@` | `2606:50c0:8001::153` |
+| AAAA | `@` | `2606:50c0:8002::153` |
+| AAAA | `@` | `2606:50c0:8003::153` |
+| CNAME | `www` | `xkrchnav.github.io` |
+
+Případný parking record (např. `185.8.237.22`) se musí smazat. `CNAME` soubor v repu se nepoužívá – při nasazení přes Actions ho GitHub ignoruje a doména se nastavuje v **Settings → Pages → Custom domain**.
+
+Po změně DNS:
+
+1. Počkat na `DNS check successful` v Settings → Pages (obvykle minuty, max. 24 h).
+2. Nechat GitHub vygenerovat HTTPS certifikát a zapnout **Enforce HTTPS**.
+3. Ověřit `https://lifebymarek.cz` a `https://www.lifebymarek.cz` (přesměruje na apex).
+4. V Search Console přidat novou property a odeslat `https://lifebymarek.cz/sitemap-index.xml`.
+
+Kontrola z terminálu:
+
+```bash
+nslookup lifebymarek.cz
+curl -sI https://lifebymarek.cz | head -5
+```
 
 Jiný hosting (Netlify, Vercel, Cloudflare Pages): nastav `SITE_URL` a `BASE_PATH=/`.
 
@@ -176,4 +204,4 @@ public/                favicon.svg, og.jpg
 - [ ] Projít texty tří článků – jsou to návrhy, uprav je podle sebe.
 - [ ] Doplnit vlastní fotky (teď jsou použité dvě z původního webu).
 - [ ] Zapojit formulář (`PUBLIC_LEAD_ENDPOINT`).
-- [ ] Po koupi domény nastavit Custom domain a Search Console.
+- [ ] Po přepnutí DNS ověřit HTTPS a přidat doménu do Search Console.
