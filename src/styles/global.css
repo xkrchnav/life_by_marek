@@ -127,6 +127,8 @@ h3 {
 }
 
 .grad-text {
+  display: inline-block;
+  padding-bottom: 0.08em;
   background: var(--grad-text);
   -webkit-background-clip: text;
   background-clip: text;

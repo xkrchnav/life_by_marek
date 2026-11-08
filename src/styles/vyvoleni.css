@@ -321,6 +321,8 @@ body {
 }
 
 .v-grad {
+  display: inline-block;
+  padding-bottom: 0.08em;
   background: linear-gradient(100deg, #d9ffb8 0%, #8bcf54 42%, #5aa7e8 100%);
   -webkit-background-clip: text;
   background-clip: text;
