@@ -66,6 +66,9 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
         working-directory: ${{ env.BUILD_PATH }}
+      - name: Check AGENTS.md snapshot
+        run: npm run agents:check
+        working-directory: ${{ env.BUILD_PATH }}
       - name: Build with Astro
         run: ${{ steps.detect-package-manager.outputs.runner }} astro build
         working-directory: ${{ env.BUILD_PATH }}

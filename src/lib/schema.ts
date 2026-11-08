@@ -13,6 +13,14 @@ export function personNode(siteUrl: URL): Json {
     image: new URL(withBase(site.ogImage), siteUrl).toString(),
     sameAs: [site.instagram],
     jobTitle: "Tvůrce projektu life_by_marek",
+    knowsAbout: [
+      "zdravá dlouhověkost",
+      "prevence",
+      "složení těla",
+      "výživa",
+      "pohyb",
+      "regenerace",
+    ],
   };
 }
 

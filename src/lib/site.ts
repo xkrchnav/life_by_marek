@@ -1,11 +1,11 @@
 export const site = {
   name: "life_by_marek",
   person: "Marek Širůček",
-  title: "Zdravé hubnutí bez diet — life_by_marek",
+  title: "Zdravá dlouhověkost a prevence | life_by_marek",
   description:
-    "Hubnutí bez drastických diet a bez hladovění. Marek Širůček ukazuje jednoduché kroky, díky kterým zhubneš a bude ti dobře. Nech kontakt a jdeme na to.",
+    "Prevence, síla a zdraví na roky dopředu. Marek Širůček ukazuje, jak jíst, hýbat se a regenerovat bez diet. Měření složení těla na Tanitě. Bez zázraků.",
   defaultDescription:
-    "Zdravé hubnutí a životní styl s Markem Širůčkem. Jednoduché kroky místo drastických diet. Nech mi na sebe kontakt a jdeme na to spolu.",
+    "Zdravá dlouhověkost, prevence a síla. Jednoduché kroky místo diet. Nech mi na sebe kontakt a jdeme na to spolu.",
   instagram: "https://www.instagram.com/life_by_marek/",
   locale: "cs_CZ",
   lang: "cs",
@@ -15,8 +15,8 @@ export const site = {
 } as const;
 
 export const navigation = [
-  { label: "Co získáš", href: "/#vyhody" },
-  { label: "Jak to funguje", href: "/#jak-to-funguje" },
+  { label: "Co řeším", href: "/#vyhody" },
+  { label: "Tanita", href: "/#tanita" },
   { label: "Příběh", href: "/#pribeh" },
   { label: "Články", href: "/clanky/" },
 ] as const;
