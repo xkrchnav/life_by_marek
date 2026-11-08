@@ -6,6 +6,7 @@ import Ticker from "../components/Ticker.astro";
 import Benefits from "../components/Benefits.astro";
 import Steps from "../components/Steps.astro";
 import Story from "../components/Story.astro";
+import Tanita from "../components/Tanita.astro";
 import BlogTeaser from "../components/BlogTeaser.astro";
 import Faq from "../components/Faq.astro";
 import Cta from "../components/Cta.astro";
@@ -24,6 +25,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft))
     <Ticker />
     <Benefits />
     <Steps />
+    <Tanita />
     <Story />
     <BlogTeaser posts={posts} />
     <Faq />

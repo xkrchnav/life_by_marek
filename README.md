@@ -4,17 +4,26 @@ Osobní web Marka Širůčka. Statický, rychlý, česky. Jeden cíl: dostat čl
 
 Postavené na **Astro 7** (bez frameworku, bez Tailwindu) + **MDX** pro články. Nasazuje se na GitHub Pages.
 
+## Obsahové zaměření
+
+Web nestaví na hubnutí jako cíli. Hlavní linka je **zdravá dlouhověkost a prevence** – svaly, složení těla, spánek, alkohol, každodenní rituály. Hubnutí je vedlejší efekt, ne hlavní slib.
+
+Důraz je na **měření na Tanitě** a na lidi, kteří už nějaké výsledky mají a chtějí je udržet. Proto je Tanita samostatná sekce na úvodu i téma jednoho článku.
+
 ---
 
 ## Rychlý start
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
-npm run check      # typová kontrola (musí projít)
-npm run build      # statický build do dist/
-npm run preview    # náhled buildu
+npm run dev          # http://localhost:4321
+npm run check        # typová kontrola (musí projít)
+npm run build        # statický build do dist/
+npm run preview      # náhled buildu
+npm run agents:sync  # po změně obsahu aktualizuje snapshot v AGENTS.md
 ```
+
+`AGENTS.md` obsahuje automaticky generovaný přehled aktuálního obsahu. CI kontroluje, že není zastaralý – po změně textů, sekcí nebo článků spusť `npm run agents:sync` a commitni i `AGENTS.md`.
 
 Node 22+.
 
@@ -26,6 +35,7 @@ Node 22+.
 | --- | --- |
 | Texty v úvodu (hero) | `src/components/Hero.astro` |
 | Výhody, kroky, otázky, ticker | `src/data/home.ts` |
+| Sekce Tanita | `src/components/Tanita.astro` + `src/data/home.ts` |
 | Příběh a fotka | `src/components/Story.astro` |
 | Přihláška (formulář) | `src/components/Cta.astro` |
 | Hlavička, menu, patička | `src/components/Header.astro`, `Footer.astro` |
@@ -194,6 +204,7 @@ src/
   pages/               index, clanky/, vyvoleni/, 404, rss.xml, robots.txt
   styles/              global.css, vyvoleni.css
 public/                favicon.svg, og.jpg
+scripts/               sync-agents.mjs (snapshot obsahu pro AGENTS.md)
 ```
 
 ---
@@ -201,7 +212,9 @@ public/                favicon.svg, og.jpg
 ## Co ještě doladit
 
 - [ ] Vyměnit video na tajné stránce za Markovo.
-- [ ] Projít texty tří článků – jsou to návrhy, uprav je podle sebe.
+- [ ] Projít texty článků – jsou to návrhy, uprav je podle sebe.
+- [ ] Potvrdit, že měření na Tanitě je součástí spolupráce (web to tak prezentuje).
+- [ ] Doplnit reálné klientské výsledky z Tanity (se souhlasem klientů).
 - [ ] Doplnit vlastní fotky (teď jsou použité dvě z původního webu).
 - [ ] Zapojit formulář (`PUBLIC_LEAD_ENDPOINT`).
 - [ ] Po přepnutí DNS ověřit HTTPS a přidat doménu do Search Console.

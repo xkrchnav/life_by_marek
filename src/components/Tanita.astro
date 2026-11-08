@@ -1,0 +1,38 @@
+---
+import { tanitaMetrics } from "../data/home";
+import { icons } from "../data/icons";
+---
+
+<section class="section section-tanita" id="tanita">
+  <div class="wrap tanita-grid">
+    <div class="tanita-copy reveal">
+      <p class="eyebrow">Tanita</p>
+      <h2>Váha ti řekne kolik. Tanita, z čeho.</h2>
+      <p class="lead">
+        Kila jsou jen jedno číslo. Tuk, svaly a viscerální tuk řeknou, na čem opravdu záleží –
+        ať jde o vzhled, nebo prevenci. Měření je start, ne cíl.
+      </p>
+      <p class="tanita-hook">
+        Máš doma Tanitu a čísla se nehýbou? Nebo se hýbou, ale nevíš proč? Přesně tam začínáme.
+      </p>
+      <a class="btn btn-tanita" href="#prihlaska">
+        CHCI ZMĚŘIT <Fragment set:html={icons.arrow} />
+      </a>
+      <p class="tanita-note">
+        Měření je součástí spolupráce. Čísla ti ukážou start – plán je to, co je posune.
+      </p>
+    </div>
+
+    <ul class="tanita-metrics">
+      {
+        tanitaMetrics.map((metric, index) => (
+          <li class="tanita-metric reveal" style={`transition-delay: ${index * 80}ms`}>
+            <span class="tanita-metric-index">{String(index + 1).padStart(2, "0")}</span>
+            <strong>{metric.label}</strong>
+            <span>{metric.text}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

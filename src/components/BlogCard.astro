@@ -31,7 +31,8 @@ const Heading = headingLevel;
         />
       ) : (
         <span class="post-card-fallback" aria-hidden="true">
-          <span>life_by_marek</span>
+          <span class="post-card-fallback-kicker">life_by_marek</span>
+          <span class="post-card-fallback-title">{tag ?? "Zdraví"}</span>
         </span>
       )
     }
