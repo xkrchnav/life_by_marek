@@ -119,6 +119,8 @@ Production: **https://lifebymarek.cz** (apex; `www` redirects). GitHub Pages ser
 
 `astro.config.mjs` reads `SITE_URL` (default `https://lifebymarek.cz`) and `BASE_PATH` (default `/`). The workflow reads repo variables `SITE_URL` / `BASE_PATH` first, then falls back to `actions/configure-pages`.
 
+**Repo variables must match the Pages mode.** Custom domain → `SITE_URL=https://lifebymarek.cz`, `BASE_PATH=/`. No custom domain (temporary github.io) → `SITE_URL=https://xkrchnav.github.io`, `BASE_PATH=/life_by_marek`. A mismatch builds assets at `/_astro/…` while the site is served from `/life_by_marek/`, so the whole design 404s.
+
 - In `.astro` files, every internal link goes through `withBase()` from `src/lib/url.ts`.
 - In Markdown/MDX, write root-relative links; `rehype-base.mjs` adds the base and trailing slash.
 - Never hardcode `/life_by_marek` anywhere.

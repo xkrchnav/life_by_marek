@@ -129,7 +129,9 @@ Po nasazení nezapomeň:
 
 ## Nasazení a doména
 
-Produkce: **https://lifebymarek.cz** (bez `www`, `www` se přesměruje).
+Cílový stav: **https://lifebymarek.cz** (apex, `www` přesměruje).
+
+**Teď (bez DNS):** web běží na **https://xkrchnav.github.io/life_by_marek/** a repo proměnné `SITE_URL` / `BASE_PATH` míří tam. Až budou DNS záznamy, přepne se podle postupu níže.
 
 Automaticky přes GitHub Actions na GitHub Pages při pushi do `main`.
 
@@ -160,10 +162,15 @@ Případný parking record (např. `185.8.237.22`) se musí smazat. `CNAME` soub
 
 Po změně DNS:
 
-1. Počkat na `DNS check successful` v Settings → Pages (obvykle minuty, max. 24 h).
-2. Nechat GitHub vygenerovat HTTPS certifikát a zapnout **Enforce HTTPS**.
-3. Ověřit `https://lifebymarek.cz` a `https://www.lifebymarek.cz` (přesměruje na apex).
-4. V Search Console přidat novou property a odeslat `https://lifebymarek.cz/sitemap-index.xml`.
+1. V GitHubu → Settings → Pages nastav **Custom domain** `lifebymarek.cz`.
+2. V **Settings → Secrets and variables → Actions → Variables** přepni `SITE_URL` na `https://lifebymarek.cz` a `BASE_PATH` na `/`.
+3. Spusť nový deploy: Actions → Deploy Astro site to Pages → **Run workflow**.
+4. Počkej na `DNS check successful` v Settings → Pages (obvykle minuty, max. 24 h).
+5. Nech GitHub vygenerovat HTTPS certifikát a zapni **Enforce HTTPS**.
+6. Ověř `https://lifebymarek.cz` a `https://www.lifebymarek.cz` (přesměruje na apex).
+7. V Search Console přidej novou property a odešli `https://lifebymarek.cz/sitemap-index.xml`.
+
+**Pozor:** `SITE_URL` a `BASE_PATH` musí odpovídat režimu Pages. Když je web na `github.io/life_by_marek/`, patří `BASE_PATH=/life_by_marek`. Když je na vlastní doméně, patří `/`. Při nesouladu se stránka načte bez CSS a obrázků (404 na `/_astro/…`).
 
 Kontrola z terminálu:
 
